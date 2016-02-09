@@ -1,10 +1,11 @@
 describe('Movie', function() {
-  it('initializes with name, release-date, screen-type', function() {
+  it('initializes with name, release-date, screen-type, showtimes', function() {
     var currentDate = Date.now();
-    var testMovie = new Movie("Braveheart", "regular", currentDate);
+    var testMovie = new Movie("Braveheart", "regular", ["20 00"], currentDate);
     expect(testMovie.name).to.equal("Braveheart");
     expect(testMovie.releaseDate).to.equal(currentDate);
     expect(testMovie.screenType).to.equal("regular");
+    expect(testMovie.showtimes[0]).to.equal("20 00");
   })
 
   it('initializes with current date if one is not given', function() {
@@ -26,9 +27,9 @@ describe('Ticket', function() {
   })
 
   it('can get ticket price', function() {
-    var testMovieOld = new Movie("Braveheart", "regular", new Date("2015-12-25T12:00:00"));
-    var testMovieNew = new Movie("The Revenant", "regular");
-    var testMovieImax = new Movie("Star Wars", "imax");
+    var testMovieOld = new Movie("Braveheart", "regular", ["19 00"], new Date("2015-12-25T12:00:00"));
+    var testMovieNew = new Movie("The Revenant", "regular", ["19 00"]);
+    var testMovieImax = new Movie("Star Wars", "imax", ["19 00"]);
     var testDateBeforeFour = new Date("2016-02-12T23:00:00");
     var testDateAfterFour = new Date("2016-02-13T03:00:00");
     var testTicketAge = new Ticket(testMovieNew, testDateAfterFour, 70);
