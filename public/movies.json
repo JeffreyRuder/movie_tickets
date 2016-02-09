@@ -1,0 +1,6 @@
+[
+  {"name": "Kung Fu Panda 3", "screenType": "regular", "releaseDate": "2016-01-29T08:00:00"},
+  {"name": "The Choice", "screenType": "regular", "releaseDate": "2016-02-05T08:00:00"},
+  {"name": "Titanic", "screenType": "regular", "releaseDate": "1997-12-19T08:00:00"},
+  {"name": "Star Wars", "screenType": "imax", "releaseDate": "2015-12-17T08:00:00"}
+]
