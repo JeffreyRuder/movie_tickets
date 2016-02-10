@@ -1,8 +1,26 @@
+var beginFormChangeListener = function (movies) {
+  $("#movie-name").change(function() {
+    $("#movie-time").empty();
+    var movieValue = $(this).val();
+    var thisMovie;
+    for (var i = 0; i < movies.length; i++) {
+      if (movieValue === movies[i].name) {
+        thisMovie = movies[i];
+      }
+    }
+
+    for (var time in thisMovie.showtimes) {
+      $("#movie-time").append("<option value='" + thisMovie.showtimes[time] + "'>" + thisMovie.showtimes[time] + "</option>");
+    }
+  })
+}
+
 var populateForm = function (movies) {
   movies.forEach(function(movie) {
     var month = (movie.releaseDate.getMonth()+1).toString();
     var day = movie.releaseDate.getDate().toString();
     var year = movie.releaseDate.getFullYear().toString();
+    var screenType = (movie.screenType === "imax")?"AN IMAX 3D EXPERIENCE":"";
     var showtimesString = ""
     for(var i = 0; i < movie.showtimes.length; i++) {
       var splitShowtime = movie.showtimes[i].split(" ");
@@ -10,7 +28,7 @@ var populateForm = function (movies) {
     }
     $(".movies").append($("<div />", {"class":"movie"})
                 .append($("<h2>" + movie.name + "</h2>"))
-                .append($("<h5>" + movie.screenType + "</h5>"))
+                .append($("<h5 class='special-screen'>" + screenType + "</h5>"))
                 .append($("<h5>" + month + "-" + day + "-" + year + "</h5>"))
                 .append($("<ul class='list-inline'>" + showtimesString + "</ul>")));
     $("#movie-name").append("<option value='" + movie.name + "'>" + movie.name + "</option>");
@@ -21,8 +39,32 @@ var populateForm = function (movies) {
   }
 };
 
+var beginFormSubmitListener = function(movies) {
+  $("form.ticket-form").submit(function(event) {
+    event.preventDefault();
+
+    var inputMovieName = $("select#movie-name").val();
+    var inputShowTime = $("select#movie-time").val().split(" ");
+    var inputShowTimeHour = inputShowTime[0];
+    var inputShowTimeMinutes = inputShowTime[1];
+    var inputAge = $("input#age").val();
+    var userMovie;
+    for (i = 0; i < movies.length; i++) {
+      if (movies[i].name === inputMovieName) {
+        userMovie = movies[i];
+      }
+    }
+
+    var now = new Date(Date.now());
+    var userShowtimeHour = new Date (now.setHours(inputShowTimeHour, inputShowTimeMinutes, 0, 0));
+    var userTicket = new Ticket(userMovie, userShowtimeHour, inputAge);
+    populatePrice(userTicket);
+  });
+}
+
 var populatePrice = function (ticket) {
   $(".ticket").empty();
+  $(".ticket").show();
   $(".ticket").append("<h2>" + ticket.movie.name + "</h2>");
   $(".ticket").append("<h3>" + ticket.screeningTime + "</h3>");
   $(".ticket").append("<h3>Price: $" + ticket.price() + ".00</h3>");
@@ -68,45 +110,11 @@ $(function() {
       movies.push(movie);
     }
     populateForm(movies);
-
-
-    $("#movie-name").change(function() {
-      $("#movie-time").empty();
-      var movieValue = $(this).val();
-      var thisMovie;
-      for (var i = 0; i < movies.length; i++) {
-        if (movieValue === movies[i].name) {
-          thisMovie = movies[i];
-        }
-      }
-
-      for (var time in thisMovie.showtimes) {
-        $("#movie-time").append("<option value='" + thisMovie.showtimes[time] + "'>" + thisMovie.showtimes[time] + "</option>");
-      }
-    })
+    beginFormChangeListener(movies);
 
   }).fail(function (jqxhr, status, error) {
     console.log('error', status, error) }
   );
 
-  $("form.ticket-form").submit(function(event) {
-    event.preventDefault();
-
-    var inputMovieName = $("select#movie-name").val();
-    var inputShowTime = $("select#movie-time").val().split(" ");
-    var inputShowTimeHour = inputShowTime[0];
-    var inputShowTimeMinutes = inputShowTime[1];
-    var inputAge = $("input#age").val();
-    var userMovie;
-    for (i = 0; i < movies.length; i++) {
-      if (movies[i].name === inputMovieName) {
-        userMovie = movies[i];
-      }
-    }
-
-    var now = new Date(Date.now());
-    var userShowtimeHour = new Date (now.setHours(inputShowTimeHour, inputShowTimeMinutes, 0, 0));
-    var userTicket = new Ticket(userMovie, userShowtimeHour, inputAge);
-    populatePrice(userTicket);
-  });
+  beginFormSubmitListener(movies);
 });

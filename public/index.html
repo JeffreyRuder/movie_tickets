@@ -30,29 +30,29 @@
         </div>
       </div>
       <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-5 checkprices">
           <h2>Check Ticket Prices</h2>
-          <form class="ticket-form">
+          <form class="ticket-form form-horizontal">
             <div class="form-group">
-              <label for="movie-name">Movie</label>
-              <select id="movie-name">
+              <label for="movie-name" class="col-md-3 control-label">Movie</label>
+              <select id="movie-name" class="col-md-9">
 
               </select>
             </div>
             <div class="form-group">
-              <label for="movie-time">Showtime</label>
-              <select id="movie-time">
+              <label for="movie-time" class="col-md-3 control-label">Showtime</label>
+              <select id="movie-time" class="col-md-9">
               </select>
             </div>
             <div class="form-group">
-              <label for="age">Enter Your Age</label>
-              <input required type="number" id="age">
+              <label for="age" class="col-md-3 control-label">Enter Your Age</label>
+              <input required type="number" id="age" class="col-md-9">
             </div>
             <button type="submit" class="btn btn-success">Check Price</button>
           </form>
         </div>
-        <div class="col-md-6">
-          <div class="ticket">
+        <div class="col-md-5 col-md-offset-2">
+          <div hidden class="ticket">
 
           </div>
         </div>
