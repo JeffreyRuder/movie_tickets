@@ -17,9 +17,8 @@ var beginFormChangeListener = function (movies) {
 
 var populateForm = function (movies) {
   movies.forEach(function(movie) {
-    var month = (movie.releaseDate.getMonth()+1).toString();
-    var day = movie.releaseDate.getDate().toString();
-    var year = movie.releaseDate.getFullYear().toString();
+    var options = {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'};
+    var dateString = movie.releaseDate.toLocaleDateString("en-US", options);
     var screenType = (movie.screenType === "imax")?"AN IMAX 3D EXPERIENCE":"";
     var showtimesString = ""
     for(var i = 0; i < movie.showtimes.length; i++) {
@@ -29,7 +28,7 @@ var populateForm = function (movies) {
     $(".movies").append($("<div />", {"class":"movie"})
                 .append($("<h2>" + movie.name + "</h2>"))
                 .append($("<h5 class='special-screen'>" + screenType + "</h5>"))
-                .append($("<h5>" + month + "-" + day + "-" + year + "</h5>"))
+                .append($("<h5><strong>Released:</strong> " + dateString + "</h5>"))
                 .append($("<ul class='list-inline'>" + showtimesString + "</ul>")));
     $("#movie-name").append("<option value='" + movie.name + "'>" + movie.name + "</option>");
   });
@@ -63,10 +62,11 @@ var beginFormSubmitListener = function(movies) {
 }
 
 var populatePrice = function (ticket) {
+  var options = {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric'}
   $(".ticket").empty();
   $(".ticket").show();
   $(".ticket").append("<h2>" + ticket.movie.name + "</h2>");
-  $(".ticket").append("<h3>" + ticket.screeningTime + "</h3>");
+  $(".ticket").append("<h5>" + ticket.screeningTime.toLocaleDateString("en-US", options) + "</h5>");
   $(".ticket").append("<h3>Price: $" + ticket.price() + ".00</h3>");
   $(".ticket").append("<button id='confirm' class='btn btn-success lightbox'>Confirm Purchase</button>");
   $('.lightbox').on("click", function() {
@@ -75,7 +75,7 @@ var populatePrice = function (ticket) {
     $('.backdrop, .box').css('display', 'block');
     $(".box").append("<div class='alert alert-success' role='alert'><p>Your purchase has been confirmed!</p></div>")
     $(".box").append("<div><h2>" + ticket.movie.name + "</h2></div>");
-    $(".box").append("<div><h3>" + ticket.screeningTime + "</h3></div>");
+    $(".box").append("<div><h5>" + ticket.screeningTime + "</h5></div>");
     $(".box").append("<div><h3>Price: $" + ticket.price() + ".00</h3></div>");
     $(".box").append("<div><img id='barcode'></img></div>");
     $("#barcode").JsBarcode((Math.floor(100000000000 + Math.random() * 900000000000)).toString());
